@@ -12,21 +12,31 @@ class ExampleApp(tk.Tk):
         # each row goes in a frame that is added to the window
 
         # put these in a frame
-        self.address_label = tk.Label(self, text="address (259)", width=10)
-        self.address_label.pack(side=tk.LEFT)
-        self.description_label = tk.Label(self, text='description', width=10)
-        self.description_label.pack(side = tk.LEFT)
-        self.entry = tk.Entry()
-        self.entry.pack(side=tk.LEFT)
-        self.button1 = tk.Button(text='Read')
-        self.button1.pack(side=tk.LEFT)
-        self.button2 = tk.Button(text='Write')
-        self.button2.pack(side=tk.LEFT)
+        frame = tk.Frame(self)
+        address_label = tk.Label(frame, text="address (259)", width=10)
+        address_label.pack(side=tk.LEFT)
+        description_label = tk.Label(frame, text='description', width=10)
+        description_label.pack(side = tk.LEFT)
+        entry = tk.Entry(frame)
+        entry.pack(side=tk.LEFT)
+        button1 = tk.Button(frame, text='Read')
+        button1.pack(side=tk.LEFT)
+        button2 = tk.Button(frame, text='Write')
+        button2.pack(side=tk.LEFT)
+        frame.pack()
 
-        # put these in a frame
-        self.label2 = tk.Label(self, text="label 2", width=10)
-        self.label2.pack(side=tk.RIGHT)
-        #self.read_BAC()
+        frame_2 = tk.Frame(self)
+        address_label = tk.Label(frame_2, text="address (259)", width=10)
+        address_label.pack(side=tk.LEFT)
+        description_label = tk.Label(frame_2, text='description', width=10)
+        description_label.pack(side = tk.LEFT)
+        entry = tk.Entry(frame_2)
+        entry.pack(side=tk.LEFT)
+        button1 = tk.Button(frame_2, text='Read')
+        button1.pack(side=tk.LEFT)
+        button2 = tk.Button(frame_2, text='Write')
+        button2.pack(side=tk.LEFT)
+        frame_2.pack()
 
     def read_BAC(self):
         # reading = client.read_holding_registers(address, num_registers, unit=device_ID).registers[0]

@@ -14,7 +14,8 @@ class row(tk.Frame):
         self.address_entry.insert(tk.END, address)
         self.address_entry.pack(side=tk.LEFT)
 
-        self.description_label = tk.Label(self, text='default', width=30)
+        label_text = asi_dict[str(address)]['name']
+        self.description_label = tk.Label(self, text=label_text, width=30)
         self.description_label.pack(side = tk.LEFT)
 
         self.value_entry = tk.Entry(self, width=6)
@@ -98,6 +99,28 @@ log = logging.getLogger()
 log.setLevel(logging.DEBUG)
 
 if __name__ == "__main__":
+
+    import xmltodict as xd
+
+    with open('ASIObjectDictionary.xml','rb') as f:
+        d = xd.parse(f)
+
+    global asi_dict
+    asi_dict = {}
+    for e in d['InternalAppEntity']['Parameters']['ParameterDescription']:
+        if 'Units' in e.keys():
+            unit = e['Units']
+        else:
+            unit = ''
+        if 'Description' in e.keys():
+            description = e['Description']
+        else:
+            description = ''
+        asi_dict[e['Address']] = {'name': e['Name'],
+                                'scale': e['Scale'],
+                                'unit': unit,
+                                'description': description}
+
     global asi_modbus
     default_addresses = [259, 260, 261]
 

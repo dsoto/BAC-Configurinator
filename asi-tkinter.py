@@ -28,6 +28,15 @@ class row(tk.Frame):
     def read(self):
         print('read', self.address_entry.get())
         # scale returning value and stuff in box
+        # reading = client.read_holding_registers(address, num_registers, unit=device_ID).registers[0]
+        # reading = 1000
+        # scale = 32
+        # self.label.configure(text=str(reading/scale))
+        # self.after(1000, self.read_BAC)
+        # address = 265      # this is the location for the battery voltage data
+        # scale = 32.0       # this is the number the data must be divided by to get the voltage
+        # num_registers = 1  # number of 16-bit readings to make
+        # device_ID = 0x01   # identifier for the ASI controller to distinguish from other devices
 
     def write(self):
         print('write', self.address_entry.get(), self.value_entry.get())
@@ -39,9 +48,7 @@ class Main_Window(tk.Tk):
     def __init__(self):
         tk.Tk.__init__(self)
 
-        # put this in a frame at top
         # make drop down of serial ports
-        # make button to connect
         serial_frame = tk.Frame(self)
         ports = {'one', 'two', 'three'}
         choice = tk.StringVar()
@@ -55,6 +62,7 @@ class Main_Window(tk.Tk):
         new_frame_button = tk.Button(self, text='New Row', command=self.new_frame)
         new_frame_button.pack()
 
+        # TODO: this reads from a default array and iterates to make rows (needs a constructor with address)
         frame_1 = row(self)
         frame_1.pack()
 
@@ -66,27 +74,16 @@ class Main_Window(tk.Tk):
         frame = row(self)
         frame.pack(side=tk.TOP)
 
-
-
-    def read_BAC(self):
-        # reading = client.read_holding_registers(address, num_registers, unit=device_ID).registers[0]
-        reading = 1000
-        scale = 32
-        self.label.configure(text=str(reading/scale))
-        self.after(1000, self.read_BAC)
+    # def connect(self):
+        # setup modbus
+        # port = '/dev/tty.usbserial-A700eCzH'
+        # client = pymodbus.client.sync.ModbusSerialClient(method='rtu',
+        #                                                  port=port,
+        #                                                  timeout=2,
+        #                                                  baudrate=115200)
+        # client.connect()
 
 if __name__ == "__main__":
-    # setup modbus
-    # port = '/dev/tty.usbserial-A700eCzH'
-    # client = pymodbus.client.sync.ModbusSerialClient(method='rtu',
-    #                                                  port=port,
-    #                                                  timeout=2,
-    #                                                  baudrate=115200)
-    # client.connect()
-    address = 265      # this is the location for the battery voltage data
-    scale = 32.0       # this is the number the data must be divided by to get the voltage
-    num_registers = 1  # number of 16-bit readings to make
-    device_ID = 0x01   # identifier for the ASI controller to distinguish from other devices
 
     app = Main_Window()
     app.title('ASI Configurator')

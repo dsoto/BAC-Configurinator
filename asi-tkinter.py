@@ -84,7 +84,7 @@ class Main_Window(tk.Tk):
 
         global asi_modbus
         port = self.serial_port_choice.get()
-        asi_modbus = pymodbus.client.sync.ModbusSerialClient(port = '/dev/tty.usbserial-DB00K1KY',
+        asi_modbus = pymodbus.client.sync.ModbusSerialClient(port = port,
                                                             baudrate = 115200,
                                                             timeout = 2,
                                                             method = 'rtu')

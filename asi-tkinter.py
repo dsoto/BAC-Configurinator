@@ -1,5 +1,8 @@
 import tkinter as tk
 import pymodbus.client.sync      # Python Modbus library
+import serial
+
+serial_port = serial.Serial()
 
 class row(tk.Frame):
     def __init__(self, parent):
@@ -27,20 +30,23 @@ class row(tk.Frame):
 
     def read(self):
         print('read', self.address_entry.get())
+        output = 'write {}\n'.format(self.address_entry.get())
+        output = bytes(output, 'ascii')
+        serial_port.write(output)
+        response = serial_port.readline()
+        print(response)
         # scale returning value and stuff in box
         # reading = client.read_holding_registers(address, num_registers, unit=device_ID).registers[0]
-        # reading = 1000
-        # scale = 32
         # self.label.configure(text=str(reading/scale))
-        # self.after(1000, self.read_BAC)
-        # address = 265      # this is the location for the battery voltage data
-        # scale = 32.0       # this is the number the data must be divided by to get the voltage
-        # num_registers = 1  # number of 16-bit readings to make
-        # device_ID = 0x01   # identifier for the ASI controller to distinguish from other devices
 
     def write(self):
-        print('write', self.address_entry.get(), self.value_entry.get())
+        global serial_port
         # scale outgoing value
+        output = 'write {} {}\n'.format(self.address_entry.get(), self.value_entry.get())
+        output = bytes(output, 'ascii')
+        serial_port.write(output)
+        response = serial_port.readline()
+        print(response)
 
 
 
@@ -50,11 +56,14 @@ class Main_Window(tk.Tk):
 
         # make drop down of serial ports
         serial_frame = tk.Frame(self)
-        ports = {'one', 'two', 'three'}
-        choice = tk.StringVar()
-        serial_menu = tk.OptionMenu(serial_frame, choice, *ports)
-        serial_menu.pack(side=tk.LEFT)
-        serial_connect_button = tk.Button(serial_frame, text='Connect')
+        ports = ['one', 'two', 'three']
+        import glob
+        ports = glob.glob('/dev/tty.*')
+        self.choice = tk.StringVar()
+        self.choice.set(ports[-1])
+        self.serial_menu = tk.OptionMenu(serial_frame, self.choice, *ports)
+        self.serial_menu.pack(side=tk.LEFT)
+        serial_connect_button = tk.Button(serial_frame, text='Connect', command=self.connect)
         serial_connect_button.pack(side=tk.RIGHT)
         serial_frame.pack()
 
@@ -69,6 +78,20 @@ class Main_Window(tk.Tk):
         frame_2 = row(self)
         frame_2.pack()
 
+    def connect(self):
+        global serial_port
+        print(self.choice.get())
+        serial_port.port = self.choice.get()
+        serial_port.baudrate = 115200
+        serial_port.timeout = 0.5
+        serial_port.open()
+        # global client
+        # client = pymodbus.client.sync.ModbusSerialClient(method='rtu',
+        #                                                  port=port,
+        #                                                  timeout=2,
+        #                                                  baudrate=115200)
+        # client.connect()
+
 
     def new_frame(self):
         frame = row(self)
@@ -77,11 +100,6 @@ class Main_Window(tk.Tk):
     # def connect(self):
         # setup modbus
         # port = '/dev/tty.usbserial-A700eCzH'
-        # client = pymodbus.client.sync.ModbusSerialClient(method='rtu',
-        #                                                  port=port,
-        #                                                  timeout=2,
-        #                                                  baudrate=115200)
-        # client.connect()
 
 if __name__ == "__main__":
 

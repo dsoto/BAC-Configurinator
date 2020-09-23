@@ -68,6 +68,8 @@ class Main_Window(tk.Tk):
         serial_frame.pack()
 
         # put in a button that inserts a new frame
+        self.new_frame_address_entry = tk.Entry(self)
+        self.new_frame_address_entry.pack()
         new_frame_button = tk.Button(self, text='New Row', command=self.new_frame)
         new_frame_button.pack()
 
@@ -90,7 +92,8 @@ class Main_Window(tk.Tk):
         print(asi_modbus)
 
     def new_frame(self):
-        frame = row(self)
+        address = self.new_frame_address_entry.get()
+        frame = row(self, address)
         frame.pack(side=tk.TOP)
 
 import logging

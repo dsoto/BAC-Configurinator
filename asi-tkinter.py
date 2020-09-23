@@ -126,9 +126,9 @@ if __name__ == "__main__":
                                 'description': description}
 
     global asi_modbus
-    default_addresses = [259, 260, 261]
+    default_addresses = [71, 73, 156, 259, 260, 261, 265]
 
     app = Main_Window()
     app.title('ASI Configuratinator')
-    app.geometry("600x300+300+300")
+    app.geometry("600x600+100+100")
     app.mainloop()

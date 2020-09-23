@@ -4,15 +4,17 @@ import serial
 
 serial_port = serial.Serial()
 
+default_addresses = [259, 260, 261]
+
 class row(tk.Frame):
-    def __init__(self, parent):
+    def __init__(self, parent, address):
         # self.address = 259
         # self.description = 'current'
 
         tk.Frame.__init__(self, parent)
 
         self.address_entry = tk.Entry(self, width=3)
-        self.address_entry.insert(tk.END, '259') #command get description, set member variable
+        self.address_entry.insert(tk.END, address)
         self.address_entry.pack(side=tk.LEFT)
 
         self.description_label = tk.Label(self, text='default description', width=30)
@@ -48,8 +50,6 @@ class row(tk.Frame):
         response = serial_port.readline()
         print(response)
 
-
-
 class Main_Window(tk.Tk):
     def __init__(self):
         tk.Tk.__init__(self)
@@ -71,12 +71,10 @@ class Main_Window(tk.Tk):
         new_frame_button = tk.Button(self, text='New Row', command=self.new_frame)
         new_frame_button.pack()
 
-        # TODO: this reads from a default array and iterates to make rows (needs a constructor with address)
-        frame_1 = row(self)
-        frame_1.pack()
-
-        frame_2 = row(self)
-        frame_2.pack()
+        # loads up list of common addresses for GUI
+        for address in default_addresses:
+            frame = row(self, address)
+            frame.pack()
 
     def connect(self):
         global serial_port
@@ -97,13 +95,9 @@ class Main_Window(tk.Tk):
         frame = row(self)
         frame.pack(side=tk.TOP)
 
-    # def connect(self):
-        # setup modbus
-        # port = '/dev/tty.usbserial-A700eCzH'
-
 if __name__ == "__main__":
 
     app = Main_Window()
-    app.title('ASI Configurator')
+    app.title('ASI Configuratinator')
     app.geometry("600x300+300+300")
     app.mainloop()

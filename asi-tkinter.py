@@ -1,42 +1,43 @@
 import tkinter as tk
 import pymodbus.client.sync      # Python Modbus library
 
-class row():
-    pass
-    # this will be a row in the configuration app
+class row(tk.Frame):
+    def __init__(self, parent):
+        # self.address = 259
+        # self.description = 'current'
+
+        tk.Frame.__init__(self, parent)
+
+        self.address_label = tk.Label(self, text="address (259)", width=10)
+        self.address_label.pack(side=tk.LEFT)
+
+        self.description_label = tk.Label(self, text='description', width=10)
+        self.description_label.pack(side = tk.LEFT)
+
+        self.value_entry = tk.Entry(self)
+        self.value_entry.pack(side=tk.LEFT)
+
+        self.read_button = tk.Button(self, text='Read')
+        self.read_button.pack(side=tk.LEFT)
+
+        self.write_button = tk.Button(self, text='Write')
+        self.write_button.pack(side=tk.LEFT)
+
 
 class ExampleApp(tk.Tk):
     def __init__(self):
         tk.Tk.__init__(self)
 
-        # each row goes in a frame that is added to the window
+        # read button callback needs address
+        # write button callback needs address and value
+        # how to put a frame in the row class and add new instances of the class to the main window
 
-        # put these in a frame
-        frame = tk.Frame(self)
-        address_label = tk.Label(frame, text="address (259)", width=10)
-        address_label.pack(side=tk.LEFT)
-        description_label = tk.Label(frame, text='description', width=10)
-        description_label.pack(side = tk.LEFT)
-        entry = tk.Entry(frame)
-        entry.pack(side=tk.LEFT)
-        button1 = tk.Button(frame, text='Read')
-        button1.pack(side=tk.LEFT)
-        button2 = tk.Button(frame, text='Write')
-        button2.pack(side=tk.LEFT)
-        frame.pack()
+        frame_1 = row(self)
+        frame_1.pack()
 
-        frame_2 = tk.Frame(self)
-        address_label = tk.Label(frame_2, text="address (259)", width=10)
-        address_label.pack(side=tk.LEFT)
-        description_label = tk.Label(frame_2, text='description', width=10)
-        description_label.pack(side = tk.LEFT)
-        entry = tk.Entry(frame_2)
-        entry.pack(side=tk.LEFT)
-        button1 = tk.Button(frame_2, text='Read')
-        button1.pack(side=tk.LEFT)
-        button2 = tk.Button(frame_2, text='Write')
-        button2.pack(side=tk.LEFT)
+        frame_2 = row(self)
         frame_2.pack()
+
 
     def read_BAC(self):
         # reading = client.read_holding_registers(address, num_registers, unit=device_ID).registers[0]

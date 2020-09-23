@@ -8,20 +8,31 @@ class row(tk.Frame):
 
         tk.Frame.__init__(self, parent)
 
-        self.address_label = tk.Label(self, text="address (259)", width=10)
-        self.address_label.pack(side=tk.LEFT)
+        self.address_entry = tk.Entry(self)
+        self.address_entry.insert(tk.END, '259') #command get description, set member variable
+        self.address_entry.pack(side=tk.LEFT)
 
-        self.description_label = tk.Label(self, text='description', width=10)
+        self.description_label = tk.Label(self, text='default description', width=10)
         self.description_label.pack(side = tk.LEFT)
 
         self.value_entry = tk.Entry(self)
+        self.value_entry.insert(tk.END, '1000')
         self.value_entry.pack(side=tk.LEFT)
 
-        self.read_button = tk.Button(self, text='Read')
+        self.read_button = tk.Button(self, text='Read', command=self.read)
         self.read_button.pack(side=tk.LEFT)
 
-        self.write_button = tk.Button(self, text='Write')
+        self.write_button = tk.Button(self, text='Write', command=self.write)
         self.write_button.pack(side=tk.LEFT)
+
+    def read(self):
+        print('read', self.address_entry.get())
+        # scale returning value and stuff in box
+
+    def write(self):
+        print('write', self.address_entry.get(), self.value_entry.get())
+        # scale outgoing value
+
 
 
 class ExampleApp(tk.Tk):
@@ -60,5 +71,6 @@ if __name__ == "__main__":
     device_ID = 0x01   # identifier for the ASI controller to distinguish from other devices
 
     app = ExampleApp()
+    app.title('ASI Configurator')
     app.geometry("600x300+300+300")
     app.mainloop()

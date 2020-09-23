@@ -38,7 +38,8 @@ class row(tk.Frame):
         print(response.registers[0])
         self.value_entry.delete(0, tk.END)
         # TODO: scale incoming value
-        self.value_entry.insert(0, str(response.registers[0]))
+        reading = response.registers[0] / float(asi_dict[str(address)]['scale'])
+        self.value_entry.insert(0, str(reading))
 
 
     def write(self):

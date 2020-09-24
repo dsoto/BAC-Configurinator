@@ -12,11 +12,11 @@ class row(tk.Frame):
         self.address_entry.pack(side=tk.LEFT)
 
         label_text = asi_dict[str(address)]['name']
-        self.description_label = tk.Label(self, text=label_text, width=30)
-        self.description_label.pack(side = tk.LEFT)
+        self.description_label = tk.Label(self, text=label_text, anchor='w', width=30)
+        self.description_label.pack(side = tk.LEFT, padx=5)
 
-        self.value_entry = tk.Entry(self, width=6)
-        self.value_entry.insert(tk.END, 'default')
+        self.value_entry = tk.Entry(self, width=7)
+        self.value_entry.insert(tk.END, '----')
         self.value_entry.pack(side=tk.LEFT)
 
         self.read_button = tk.Button(self, text='Read', command=self.read)
@@ -63,10 +63,12 @@ class Main_Window(tk.Tk):
         serial_frame.pack()
 
         # put in a button that inserts a new frame
-        self.new_frame_address_entry = tk.Entry(self)
-        self.new_frame_address_entry.pack()
-        new_frame_button = tk.Button(self, text='New Row', command=self.new_frame)
-        new_frame_button.pack()
+        new_row_frame = tk.Frame(self)
+        self.new_frame_address_entry = tk.Entry(new_row_frame)
+        self.new_frame_address_entry.pack(side=tk.LEFT)
+        new_frame_button = tk.Button(new_row_frame, text='New Row', command=self.new_frame)
+        new_frame_button.pack(side=tk.RIGHT)
+        new_row_frame.pack()
 
         self.write_flash_button = tk.Button(self, text="Write Flash", command=self.write_flash)
         self.write_flash_button.pack()
@@ -128,7 +130,7 @@ if __name__ == "__main__":
                                 'description': description}
 
     global asi_modbus
-    default_addresses = [71, 73, 156, 259, 260, 261, 265]
+    default_addresses = [71, 73, 156, 259, 260, 261, 265, 481]
 
     app = Main_Window()
     app.title('ASI Configuratinator')

@@ -68,11 +68,19 @@ class Main_Window(tk.Tk):
         new_frame_button = tk.Button(self, text='New Row', command=self.new_frame)
         new_frame_button.pack()
 
+        self.write_flash_button = tk.Button(self, text="Write Flash", command=self.write_flash)
+        self.write_flash_button.pack()
+
         # loads up list of common addresses for GUI
         for address in default_addresses:
             frame = row(self, address)
             frame.pack()
             # fetch names for addresses
+
+    def write_flash(self):
+        address = 511
+        value = 0x7FFF
+        asi_modbus.write_registers(address, value, unit=0x01)
 
     def connect(self):
 

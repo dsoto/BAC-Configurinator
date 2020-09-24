@@ -1,12 +1,9 @@
 import tkinter as tk
-import pymodbus.client.sync      # Python Modbus library
-# import serial
+import pymodbus.client.sync
 
 
 class row(tk.Frame):
     def __init__(self, parent, address):
-        # self.address = 259
-        # self.description = 'current'
 
         tk.Frame.__init__(self, parent)
 
@@ -37,19 +34,16 @@ class row(tk.Frame):
         response = asi_modbus.read_holding_registers(address, 1, unit=0x01)
         print(response.registers[0])
         self.value_entry.delete(0, tk.END)
-        # TODO: scale incoming value
         reading = response.registers[0] / float(asi_dict[str(address)]['scale'])
         self.value_entry.insert(0, str(reading))
 
 
     def write(self):
         global serial_port
-        # TODO: scale outgoing value
-        output = 'write {} {}\n'.format(self.address_entry.get(), self.value_entry.get())
-        output = bytes(output, 'ascii')
-        serial_port.write(output)
-        response = serial_port.readline()
-        print(response)
+        address = int(self.address_entry.get())
+        value = float(self.value_entry.get()) * float(asi_dict[str(address)]['scale'])
+        print('writing', address, int(value))
+        asi_modbus.write_registers(address, int(value), unit=0x01)
 
 class Main_Window(tk.Tk):
     def __init__(self):

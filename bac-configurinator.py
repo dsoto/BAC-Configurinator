@@ -136,7 +136,7 @@ if __name__ == "__main__":
     global asi_modbus
 
     # specify prepopulated parameters for GUI
-    default_addresses = [71, 73, 156, 259, 260, 261, 265, 481]
+    default_addresses = [71, 73, 155, 156, 259, 261, 265, 481]
 
     app = Main_Window()
     app.title('ASI Configuratinator')

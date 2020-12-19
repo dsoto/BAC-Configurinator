@@ -3,6 +3,7 @@ import pymodbus.client.sync
 
 
 class row(tk.Frame):
+    # GUI row object with address, label, read, and write buttons
     def __init__(self, parent, address):
 
         tk.Frame.__init__(self, parent)
@@ -26,6 +27,7 @@ class row(tk.Frame):
         self.write_button.pack(side=tk.LEFT)
 
     def read(self):
+        # callback to retreive value from BAC
         global asi_modbus
         print(asi_modbus.method)
         print(asi_modbus.port)
@@ -39,6 +41,7 @@ class row(tk.Frame):
 
 
     def write(self):
+        # callback to write value to BAC
         global serial_port
         address = int(self.address_entry.get())
         value = float(self.value_entry.get()) * float(asi_dict[str(address)]['scale'])
@@ -70,28 +73,28 @@ class Main_Window(tk.Tk):
         new_frame_button.pack(side=tk.RIGHT)
         new_row_frame.pack()
 
+        # button to put new configuration in BAC persistent memory
         self.write_flash_button = tk.Button(self, text="Write Flash", command=self.write_flash)
         self.write_flash_button.pack()
 
-        # loads up list of common addresses for GUI
+        # loads up list of common addresses and frames for GUI
         for address in default_addresses:
             frame = row(self, address)
             frame.pack()
-            # fetch names for addresses
 
     def write_flash(self):
+        # callback for BAC persistent memory write
         address = 511
         value = 0x7FFF
         asi_modbus.write_registers(address, value, unit=0x01)
 
     def connect(self):
-
         global asi_modbus
         port = self.serial_port_choice.get()
         asi_modbus = pymodbus.client.sync.ModbusSerialClient(port = port,
-                                                            baudrate = 115200,
-                                                            timeout = 2,
-                                                            method = 'rtu')
+                                                             baudrate = 115200,
+                                                             timeout = 2,
+                                                             method = 'rtu')
         asi_modbus.connect()
         print('connected', asi_modbus.connect())
         print(asi_modbus)
@@ -108,6 +111,7 @@ log.setLevel(logging.DEBUG)
 
 if __name__ == "__main__":
 
+    # read object dictionary into a dict for use by GUI
     import xmltodict as xd
 
     with open('ASIObjectDictionary.xml','rb') as f:
@@ -130,6 +134,8 @@ if __name__ == "__main__":
                                 'description': description}
 
     global asi_modbus
+
+    # specify prepopulated parameters for GUI
     default_addresses = [71, 73, 156, 259, 260, 261, 265, 481]
 
     app = Main_Window()

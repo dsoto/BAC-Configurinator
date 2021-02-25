@@ -1,5 +1,7 @@
 # ASI Configurinator
 
+**Warning:** You must have the object dictionary file that corresponds to your firmware version or you can brick your controller.
+
 This is a minimal working example of an application to configure the parameters of an ASI BAC controller.
 
 It uses Python and the Tkinter library to construct a simple GUI to write and read BAC parameters.
